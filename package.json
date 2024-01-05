@@ -1,0 +1,24 @@
+{
+  "name": "ogam_diary_server",
+  "version": "1.0.0",
+  "description": "ogram diary server",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node dist/app.js"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.6",
+    "@types/winston": "^2.4.4",
+    "express": "^4.18.2",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "winston": "^3.11.0"
+  }
+}
