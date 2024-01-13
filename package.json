@@ -30,6 +30,7 @@
   "dependencies": {
     "celebrate": "^15.0.3",
     "dotenv": "^16.3.1",
+    "typedi": "^0.10.0",
     "winston": "^3.11.0"
   }
 }
