@@ -3,7 +3,7 @@ import { Router, Request, Response } from "express";
 const route = Router();
 
 export default (app: Router) => {
-  app.use("/api/v1/diary", route);
+  app.use("/diary", route);
 
   route.get("/list", (req: Request, res: Response) => {
     return res.json({}).status(200);
@@ -22,6 +22,10 @@ export default (app: Router) => {
   });
 
   route.delete("/delete/:id", (req: Request, res: Response) => {
+    return res.json({}).status(200);
+  });
+
+  route.post("/bookmark/:id", (req: Request, res: Response) => {
     return res.json({}).status(200);
   });
 };

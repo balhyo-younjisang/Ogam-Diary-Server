@@ -14,6 +14,6 @@ export default {
     level: process.env.LOG_LEVEL || "silly",
   },
   api: {
-    prefix: "/api",
+    prefix: "/api/v1",
   },
 };
