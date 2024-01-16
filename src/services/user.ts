@@ -25,7 +25,7 @@ export default class UserService {
 
       return user.email;
     } catch (e) {
-      throw new Error("User Sigin Up ERROR");
+      throw new Error("Sign up is failed");
     }
   }
 
