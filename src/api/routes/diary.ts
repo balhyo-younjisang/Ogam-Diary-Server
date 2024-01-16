@@ -1,4 +1,4 @@
-import DiaryService from "@/services/diary";
+import DiaryService from "../../services/diary";
 import { Router, Request, Response, NextFunction } from "express";
 import Container from "typedi";
 

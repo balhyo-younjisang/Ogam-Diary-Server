@@ -2,9 +2,8 @@ import "reflect-metadata";
 import { Router, Request, Response, NextFunction } from "express";
 import { celebrate, Joi } from "celebrate";
 import { Container } from "typedi";
-import UserService from "@/services/user";
-import { IUserInputDTO } from "@/interfaces/IUser";
-import LoggerInstance from "@/loaders/logger";
+import UserService from "../../services/user";
+import { IUserInputDTO } from "../../interfaces/IUser";
 
 const route = Router();
 

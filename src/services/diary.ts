@@ -1,10 +1,10 @@
-import { database } from "@/config/firebase";
+import { database } from "../config/firebase";
 import {
   IDiary,
   IDiaryEditRequestDTO,
   IDiaryRequestDTO,
   IDiaryResponseDTO,
-} from "@/interfaces/IDiary";
+} from "../interfaces/IDiary";
 import {
   addDoc,
   collection,

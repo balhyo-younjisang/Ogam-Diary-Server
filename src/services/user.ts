@@ -1,6 +1,6 @@
-import { IUserInputDTO } from "@/interfaces/IUser";
+import { IUserInputDTO } from "../interfaces/IUser";
 import { Inject, Service } from "typedi";
-import { auth } from "@/config/firebase";
+import { auth } from "../config/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
