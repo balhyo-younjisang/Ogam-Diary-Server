@@ -1,10 +1,15 @@
-import { Router, Request, Response } from "express";
+import "reflect-metadata";
+import { Router, Request, Response, NextFunction } from "express";
 import { celebrate, Joi } from "celebrate";
+import { Container } from "typedi";
+import UserService from "@/services/user";
+import { IUserInputDTO } from "@/interfaces/IUser";
+import LoggerInstance from "@/loaders/logger";
 
 const route = Router();
 
 export default (app: Router) => {
-  app.use("/users", route);
+  app.use(`/user`, route);
 
   /***
    * @path /api/v1/login
@@ -14,13 +19,17 @@ export default (app: Router) => {
     "/login",
     celebrate({
       body: Joi.object({
-        email: Joi.string()
-          .required()
-          .regex(new RegExp("/^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/")), // 이메일 유효성 검사
+        email: Joi.string().required(), // 이메일 유효성 검사
         password: Joi.string().required(),
       }),
     }),
-    (req: Request, res: Response) => {}
+    async (req: Request, res: Response) => {
+      const userServiceInstance = Container.get(UserService);
+
+      const email = await userServiceInstance.SignIn(req.body as IUserInputDTO);
+
+      return res.status(201).json({ email });
+    }
   );
 
   /***
@@ -31,13 +40,17 @@ export default (app: Router) => {
     "/join",
     celebrate({
       body: Joi.object({
-        email: Joi.string()
-          .required()
-          .regex(new RegExp("/^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/")), // 이메일 유효성 검사
+        email: Joi.string().required(), // 이메일 유효성 검사
         password: Joi.string().required(),
         confirmPassword: Joi.string().required(),
       }),
     }),
-    (req: Request, res: Response) => {}
+    async (req: Request, res: Response, next: NextFunction) => {
+      const userServiceInstance = Container.get(UserService);
+
+      const email = await userServiceInstance.SignUp(req.body as IUserInputDTO);
+
+      return res.status(201).json({ email });
+    }
   );
 };

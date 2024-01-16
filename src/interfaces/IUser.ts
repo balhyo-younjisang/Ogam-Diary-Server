@@ -6,4 +6,9 @@ export interface IUser {
 export interface IUserInputDTO {
   email: string;
   password: string;
+  confirmPassword: string;
+}
+
+export interface IUserResponseDTO {
+  email: string;
 }

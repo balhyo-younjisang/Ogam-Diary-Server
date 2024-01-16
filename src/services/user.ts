@@ -1,61 +1,44 @@
-import { IUser, IUserInputDTO } from "@/interfaces/IUser";
+import { IUserInputDTO } from "@/interfaces/IUser";
 import { Inject, Service } from "typedi";
-import jwt from "jsonwebtoken";
-import argon2 from "argon2";
-import { randomBytes } from "crypto";
-import { supabase } from "@/config/supabase";
-import config from "@/config";
+import { auth } from "@/config/firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 @Service()
 export default class UserService {
   constructor(@Inject("logger") private logger) {}
 
-  public async SignUp(
-    userInputDTO: IUserInputDTO
-  ): Promise<{ user: IUser; token: string }> {
+  public async SignUp(userInputDTO: IUserInputDTO): Promise<String> {
     try {
-      const salt = randomBytes(32);
+      const { password, confirmPassword } = userInputDTO;
 
-      const hashedPassword = await argon2.hash(userInputDTO.password, {
-        salt,
-      });
-      await supabase.from("users").insert({
-        ...userInputDTO,
-        salt: salt.toString("hex"),
-        password: hashedPassword,
-      });
+      if (password !== confirmPassword)
+        throw new Error("The password you entered is incorrect.");
 
-      const { data, error } = await supabase
-        .from("users")
-        .select()
-        .eq("email", userInputDTO.email);
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        userInputDTO.email,
+        password
+      );
 
-      const token = this.generateToken(data[0]);
-      const user = data[0];
-
-      if (error) {
-        throw new Error("User cannot be created");
-      }
-
-      return { user, token };
+      return user.email;
     } catch (e) {
-      this.logger.error(e);
-      throw e;
+      throw new Error("User Sigin Up ERROR");
     }
   }
 
-  private generateToken(user: IUser) {
-    const today = new Date();
-    const exp = new Date(today);
+  public async SignIn(userInputDTO: IUserInputDTO): Promise<String> {
+    try {
+      const { email, password } = userInputDTO;
 
-    exp.setDate(today.getDate() + 60);
+      this.logger.info(email);
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
 
-    return jwt.sign(
-      {
-        email: user.email,
-        exp: exp.getTime() / 1000,
-      },
-      config.jwtSecret
-    );
+      return user.email;
+    } catch (e) {
+      throw new Error("Invalid Password");
+    }
   }
 }
