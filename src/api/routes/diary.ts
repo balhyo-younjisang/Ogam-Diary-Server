@@ -1,4 +1,3 @@
-import LoggerInstance from "@/loaders/logger";
 import DiaryService from "@/services/diary";
 import { Router, Request, Response, NextFunction } from "express";
 import Container from "typedi";

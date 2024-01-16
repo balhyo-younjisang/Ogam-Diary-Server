@@ -58,13 +58,14 @@ export default class DiaryService {
     date,
   }: IDiaryRequestDTO): Promise<string> {
     try {
+      const convertDate = new Date(date);
       const docRef = await addDoc(collection(database, email), {
         situation,
         think,
         emotion,
         reaction,
         action,
-        date,
+        convertDate,
       });
 
       return docRef.id;
@@ -96,6 +97,7 @@ export default class DiaryService {
     date,
   }: IDiaryEditRequestDTO) {
     try {
+      const convertDate = new Date(date);
       const diary = doc(database, email, diaryId);
       await updateDoc(diary, {
         situation,
@@ -103,7 +105,7 @@ export default class DiaryService {
         emotion,
         reaction,
         action,
-        date,
+        convertDate,
       });
       const updatedDiary = await getDoc(diary);
 
@@ -116,20 +118,6 @@ export default class DiaryService {
   public async deleteDiary(email: string, diaryId: string) {
     try {
       await deleteDoc(doc(database, email, diaryId));
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  public async bookmarkDiary(email: string, diaryId: string) {
-    try {
-      const diary = doc(database, email, diaryId);
-      await updateDoc(diary, {
-        bookmark: true,
-      });
-      const updatedDiary = await getDoc(diary);
-
-      return updatedDiary;
     } catch (e) {
       throw e;
     }
