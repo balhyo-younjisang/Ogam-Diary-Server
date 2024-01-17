@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "nodemon ./build/app.js",
+    "start": "forever start ./build/app.js",
     "inspect": "nodemon --inspect src/app.ts",
     "test": "jest"
   },
@@ -33,6 +33,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "firebase": "^10.7.1",
+    "forever": "^4.0.3",
     "jsonwebtoken": "^9.0.2",
     "reflect-metadata": "^0.2.1",
     "typedi": "^0.10.0",
