@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "pm2 start ./build/app.js",
+    "start": "pm2 start ./build/app.js -- --port 3000",
     "inspect": "nodemon --inspect src/app.ts",
     "test": "jest"
   },
@@ -37,7 +37,6 @@
     "helmet": "^7.1.0",
     "hpp": "^0.2.3",
     "jsonwebtoken": "^9.0.2",
-    "pm2": "^5.3.0",
     "reflect-metadata": "^0.2.1",
     "typedi": "^0.10.0",
     "winston": "^3.11.0"
