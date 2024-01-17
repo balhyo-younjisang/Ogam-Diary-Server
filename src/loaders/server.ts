@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import routes from "../api";
 import config from "../config";
+import helmet from "helmet";
+import hpp from "hpp";
 
 export default ({ app }: { app: express.Application }) => {
   /**
@@ -17,6 +19,8 @@ export default ({ app }: { app: express.Application }) => {
   app.enable("trust proxy");
 
   app.use(cors());
+  app.use(helmet());
+  app.use(hpp());
   app.use(express.json());
   app.use(express.urlencoded());
   app.use(config.api.prefix, routes());
