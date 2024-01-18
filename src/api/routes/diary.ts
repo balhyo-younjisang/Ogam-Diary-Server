@@ -10,93 +10,128 @@ export default (app: Router) => {
   route.get(
     "/list/:date",
     async (req: Request, res: Response, next: NextFunction) => {
-      const diaryInstance = Container.get(DiaryService);
-      const { date } = req.params;
-      const { email } = req.body;
+      try {
+        const diaryInstance = Container.get(DiaryService);
+        const { date } = req.params;
+        const { email } = req.body;
 
-      if (!email) return res.json({ msg: "Email is null" }).status(500);
+        if (!email) return res.json({ msg: "Email is null" }).status(500);
 
-      const diaryList = await diaryInstance.getListView(email, new Date(date));
+        const diaryList = await diaryInstance.getListView(
+          email,
+          new Date(date)
+        );
 
-      return res.json({ diaryList }).status(200);
+        return res.json({ diaryList }).status(200);
+      } catch (e) {
+        next(e);
+      }
     }
   );
 
-  route.post("/write", async (req: Request, res: Response) => {
-    const diaryInstance = Container.get(DiaryService);
-    const { email, situation, think, emotion, reaction, action, date } =
-      req.body;
+  route.post(
+    "/write",
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const diaryInstance = Container.get(DiaryService);
+        const { email, situation, think, emotion, reaction, action, date } =
+          req.body;
 
-    if (!email) return res.json({ msg: "Email is null" }).status(500);
+        if (!email) return res.json({ msg: "Email is null" }).status(500);
 
-    if (
-      !email ||
-      !situation ||
-      !think ||
-      !emotion ||
-      !reaction ||
-      !action ||
-      !date
-    ) {
-      return res.json({ msg: "일기 내용이 비어있으면 안돼용" }).status(500);
+        if (
+          !email ||
+          !situation ||
+          !think ||
+          !emotion ||
+          !reaction ||
+          !action ||
+          !date
+        ) {
+          return res.json({ msg: "일기 내용이 비어있으면 안돼용" }).status(500);
+        }
+
+        const diary = await diaryInstance.addDiary({
+          email,
+          situation,
+          think,
+          emotion,
+          reaction,
+          action,
+          date,
+        });
+
+        return res.json({ diary }).status(200);
+      } catch (e) {
+        next(e);
+      }
     }
+  );
 
-    const diary = await diaryInstance.addDiary({
-      email,
-      situation,
-      think,
-      emotion,
-      reaction,
-      action,
-      date,
-    });
+  route.get(
+    "/view/:id",
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const diaryInstance = Container.get(DiaryService);
+        const { email } = req.body;
+        const { id } = req.params;
 
-    return res.json({ diary }).status(200);
-  });
+        if (!email) return res.json({ msg: "Email is null" }).status(500);
 
-  route.get("/view/:id", async (req: Request, res: Response) => {
-    const diaryInstance = Container.get(DiaryService);
-    const { email } = req.body;
-    const { id } = req.params;
+        const diary = await diaryInstance.getDiary(email, id);
 
-    if (!email) return res.json({ msg: "Email is null" }).status(500);
+        return res.json({ diary }).status(200);
+      } catch (e) {
+        next(e);
+      }
+    }
+  );
 
-    const diary = await diaryInstance.getDiary(email, id);
+  route.patch(
+    "/edit/:diaryId",
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const diaryInstance = Container.get(DiaryService);
+        const { email, situation, think, emotion, reaction, action, date } =
+          req.body;
+        const { diaryId } = req.params;
 
-    return res.json({ diary }).status(200);
-  });
+        if (!email) return res.json({ msg: "Email is null" }).status(500);
 
-  route.patch("/edit/:diaryId", async (req: Request, res: Response) => {
-    const diaryInstance = Container.get(DiaryService);
-    const { email, situation, think, emotion, reaction, action, date } =
-      req.body;
-    const { diaryId } = req.params;
+        const diary = await diaryInstance.editDiary({
+          email,
+          diaryId,
+          situation,
+          think,
+          emotion,
+          reaction,
+          action,
+          date,
+        });
 
-    if (!email) return res.json({ msg: "Email is null" }).status(500);
+        return res.json({ diary }).status(200);
+      } catch (e) {
+        next(e);
+      }
+    }
+  );
 
-    const diary = await diaryInstance.editDiary({
-      email,
-      diaryId,
-      situation,
-      think,
-      emotion,
-      reaction,
-      action,
-      date,
-    });
+  route.delete(
+    "/delete/:id",
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const diaryInstance = Container.get(DiaryService);
+        const { email } = req.body;
+        const { id } = req.params;
 
-    return res.json({ diary }).status(200);
-  });
+        if (!email) return res.json({ msg: "Email is null" }).status(500);
 
-  route.delete("/delete/:id", async (req: Request, res: Response) => {
-    const diaryInstance = Container.get(DiaryService);
-    const { email } = req.body;
-    const { id } = req.params;
+        await diaryInstance.deleteDiary(email, id);
 
-    if (!email) return res.json({ msg: "Email is null" }).status(500);
-
-    await diaryInstance.deleteDiary(email, id);
-
-    return res.status(200);
-  });
+        return res.status(200);
+      } catch (e) {
+        next(e);
+      }
+    }
+  );
 };

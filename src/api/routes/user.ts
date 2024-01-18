@@ -22,12 +22,17 @@ export default (app: Router) => {
         password: Joi.string().required(),
       }),
     }),
-    async (req: Request, res: Response) => {
-      const userServiceInstance = Container.get(UserService);
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const userServiceInstance = Container.get(UserService);
+        const email = await userServiceInstance.SignIn(
+          req.body as IUserInputDTO
+        );
 
-      const email = await userServiceInstance.SignIn(req.body as IUserInputDTO);
-
-      return res.status(201).json({ email });
+        return res.status(201).json({ email });
+      } catch (e) {
+        next(e);
+      }
     }
   );
 
@@ -45,11 +50,16 @@ export default (app: Router) => {
       }),
     }),
     async (req: Request, res: Response, next: NextFunction) => {
-      const userServiceInstance = Container.get(UserService);
+      try {
+        const userServiceInstance = Container.get(UserService);
+        const email = await userServiceInstance.SignUp(
+          req.body as IUserInputDTO
+        );
 
-      const email = await userServiceInstance.SignUp(req.body as IUserInputDTO);
-
-      return res.status(201).json({ email });
+        return res.status(201).json({ email });
+      } catch (e) {
+        next(e);
+      }
     }
   );
 };
