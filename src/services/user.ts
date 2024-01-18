@@ -25,7 +25,7 @@ export default class UserService {
 
       return user.email;
     } catch (e) {
-      throw new Error("Sign up is failed");
+      throw e;
     }
   }
 
@@ -38,7 +38,7 @@ export default class UserService {
 
       return user.email;
     } catch (e) {
-      throw new Error("Invalid Password");
+      throw e;
     }
   }
 }
