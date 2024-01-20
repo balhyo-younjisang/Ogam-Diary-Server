@@ -73,7 +73,7 @@ export default (app: Router) => {
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const diaryInstance = Container.get(DiaryService);
-        const { email } = req.body;
+        const email = req.query.email as string;
         const { id } = req.params;
 
         if (!email) return res.json({ msg: "Email is null" }).status(500);
