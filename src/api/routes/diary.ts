@@ -13,7 +13,7 @@ export default (app: Router) => {
       try {
         const diaryInstance = Container.get(DiaryService);
         const { date } = req.params;
-        const { email } = req.body;
+        const email = req.query.email as string;
 
         if (!email) return res.json({ msg: "Email is null" }).status(500);
 

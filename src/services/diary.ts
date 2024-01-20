@@ -28,7 +28,7 @@ export default class DiaryService {
       const diaryList: IDiaryResponseDTO[] = new Array();
 
       querySnapshot.forEach((doc) => {
-        const writedDate = new Date(doc.data().date.toDate());
+        const writedDate = new Date(doc.data().convertDate.toDate());
 
         if (
           writedDate.getFullYear() === date.getFullYear() &&
